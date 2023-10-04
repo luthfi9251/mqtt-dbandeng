@@ -20,7 +20,10 @@ mqttClient.connect();
 io.on("connection", (socket) => {
   socket.on("message", (msg) => {
     let splittedMsg = msg.split(";");
-    mqttClient.sendMessage(splittedMsg[0], splittedMsg[1]);
+    mqttClient.sendMessage(
+      splittedMsg[0],
+      splittedMsg.slice(0, splittedMsg.length).join(";")
+    );
   });
 });
 

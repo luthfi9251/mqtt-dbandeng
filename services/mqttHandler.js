@@ -33,16 +33,17 @@ class MQTTHandler {
     });
 
     this.mqtt_client.subscribe(this.TOPIC_DATABANDENG, { qos: 0 });
-    this.mqtt_client.subscribe(this.TOPIC_ACTIONTOIOT, { qos: 0 });
-    this.mqtt_client.subscribe(this.TOPIC_AUTHIOT, { qos: 0 });
+    this.mqtt_client.subscribe(this.TOPIC_ACTIONTOIOT + "/res", { qos: 0 });
+    this.mqtt_client.subscribe(this.TOPIC_AUTHIOT + "/res", { qos: 0 });
 
     this.mqtt_client.on("message", (topic, message) => {
       console.log(topic + " " + message);
       switch (topic) {
-        case this.TOPIC_ACTIONTOIOT:
+        case this.TOPIC_ACTIONTOIOT + "/res":
+          this.socketIoInstance.emit("cmd_iot", message);
           break;
 
-        case this.TOPIC_AUTHIOT:
+        case this.TOPIC_AUTHIOT + "/res":
           if (message.toString().toLowerCase() === "success") {
             this.socketIoInstance.emit("auth_iot", "success");
           } else {
