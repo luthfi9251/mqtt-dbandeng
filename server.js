@@ -155,6 +155,7 @@ app.get("/laporan/available", async (req, res) => {
         message: result.map((item) => {
             return {
                 ...item,
+                tanggalRaw: item.tanggal.toISOString().slice(0, 10),
                 tanggal: utils.convertDate(item.tanggal),
             };
         }),

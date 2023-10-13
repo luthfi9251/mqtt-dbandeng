@@ -35,7 +35,7 @@ function getDataIOTbyId(id, date) {
 function getAvailableLaporanData(id) {
     return new Promise((resolve, reject) => {
         db.query(
-            `SELECT DATE(created_at) AS tanggal,SUM(CASE WHEN panjang = 'Besar' THEN 1 ELSE 0 END) AS besar_count,SUM(CASE WHEN panjang = 'Sedang' THEN 1 ELSE 0 END) AS sedang_count, SUM(CASE WHEN panjang = 'Kecil' THEN 1 ELSE 0 END) AS kecil_count FROM iotdbandengs WHERE id = ? GROUP BY DATE(created_at) ORDER BY tanggal;`,
+            `SELECT DATE(created_at) AS tanggal,SUM(CASE WHEN panjang = 'Besar' THEN 1 ELSE 0 END) AS besar_count,SUM(CASE WHEN panjang = 'Sedang' THEN 1 ELSE 0 END) AS sedang_count, SUM(CASE WHEN panjang = 'Kecil' THEN 1 ELSE 0 END) AS kecil_count, SUM(berat) AS total_berat, SUM(harga) AS total_harga FROM iotdbandengs WHERE id = ? GROUP BY DATE(created_at) ORDER BY tanggal;`,
             [id]
         )
             .then((data) => {
