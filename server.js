@@ -153,9 +153,13 @@ app.get("/laporan/available", async (req, res) => {
     res.status(200).json({
         success: "true",
         message: result.map((item) => {
+            const [day, month, year] = item.tanggal
+                .toLocaleString("id-ID")
+                .slice(0, 10)
+                .split("/");
             return {
                 ...item,
-                tanggalRaw: item.tanggal.toISOString().slice(0, 10),
+                tanggalRaw: `${year}-${month}-${day}`,
                 tanggal: utils.convertDate(item.tanggal),
             };
         }),
