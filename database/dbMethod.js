@@ -26,7 +26,7 @@ function getDataIOTbyId(id, date) {
                 resolve(data);
             })
             .catch((err) => {
-                console.log(`[!] Error : dbMethod : saveDataIOT : ${err}`);
+                console.log(`[!] Error : dbMethod : getDataIOTbyId : ${err}`);
                 reject(err);
             });
     });
@@ -42,7 +42,7 @@ function getAvailableLaporanData(id) {
                 resolve(data);
             })
             .catch((err) => {
-                console.log(`[!] Error : dbMethod : saveDataIOT : ${err}`);
+                console.log(`[!] Error : dbMethod : getAvailableLaporanData : ${err}`);
                 reject(err);
             });
     });
@@ -57,10 +57,25 @@ function getDetailMitra(id, field) {
                 resolve(data);
             })
             .catch((err) => {
-                console.log(`[!] Error : dbMethod : saveDataIOT : ${err}`);
+                console.log(`[!] Error : dbMethod : getDetailMitra : ${err}`);
                 reject(err);
             });
     });
+}
+
+function getIOTRunningData(id){
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT DATE(time_on) as tanggal, SUM(TIMESTAMPDIFF(MINUTE, time_on, time_off)/60) AS hours_work FROM log_iotdbandeng WHERE id_mitra=? GROUP BY DATE(time_on) `, [
+            id,
+        ])
+            .then((data) => {
+                resolve(data);
+            })
+            .catch((err) => {
+                console.log(`[!] Error : dbMethod : getIOTRunningData : ${err}`);
+                reject(err);
+            });
+    })
 }
 
 module.exports = {
@@ -68,4 +83,5 @@ module.exports = {
     getDataIOTbyId,
     getDetailMitra,
     getAvailableLaporanData,
+    getIOTRunningData
 };

@@ -28,6 +28,23 @@ io.on("connection", (socket) => {
             splittedMsg.slice(0, splittedMsg.length).join(";")
         );
     });
+
+    socket.on("log_devices", msg => {
+        dbAction.getIOTRunningData(msg)
+        .then(res => {
+            res.forEach(item => {
+                item.fullTanggal = utils.convertDate(item.tanggal)
+                item.tanggal = item.tanggal.toLocaleString("id-ID").slice(0,10)
+            })
+            socket.emit("log_devices/res", res)
+            //console.log(res)
+        })
+        .catch(err => {
+            //console.log(err)
+            socket.emit("log_devices/res", {err: err})
+        })
+    })
+
 });
 
 app.get("/", (req, res) => {
