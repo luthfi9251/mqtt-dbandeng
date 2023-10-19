@@ -10,6 +10,14 @@ function convertDate(date) {
     return event.toLocaleDateString("id-ID", options);
 }
 
+function formatSocketResponse(topic, message){
+    return {
+        topic,
+        message
+    }
+}
+
 module.exports = {
     convertDate,
+    formatSocketResponse
 };

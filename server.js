@@ -29,6 +29,30 @@ io.on("connection", (socket) => {
         );
     });
 
+    socket.on("add_device_log", (msg) => {
+        let MODE = {
+            CREATE: 1,
+            UPDATE: 2,
+        }
+        // format = 1;id_mitra-ada-adad-adada-daa
+        let message = msg.split(";")
+        //console.log(message)
+        switch(parseInt(message[0])){
+            case MODE.CREATE:
+                //console.log("mode create")
+                dbAction.addLogDeviceIOT(message[1])
+                .then(data => socket.emit("response_socket",utils.formatSocketResponse("add_device_log", "Success add Device Log") ))
+                break;
+            case MODE.UPDATE:
+                dbAction.updateLogIOTDevices(message[1])
+                .then(data => socket.emit("response_socket",utils.formatSocketResponse("add_device_log", "Success update Device Log") ))
+                break;
+            default:
+                console.log("default")
+                break;
+        }
+    })
+
     socket.on("log_devices", msg => {
         dbAction.getIOTRunningData(msg)
         .then(res => {

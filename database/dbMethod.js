@@ -78,10 +78,44 @@ function getIOTRunningData(id){
     })
 }
 
+function addLogDeviceIOT(id){
+    return new Promise((resolve, reject)=>{
+        //console.log("running query")
+        db.query(`INSERT INTO log_iotdbandeng VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`, [
+            id,
+        ])
+        .then((data) => {
+            
+            resolve(data);
+        })
+        .catch((err) => {
+            console.log(`[!] Error : dbMethod : addLogDeviceIOT : ${err}`);
+            reject(err);
+        });
+    })
+}
+
+function updateLogIOTDevices(id){
+    return new Promise((resolve, reject)=>{
+        db.query(`UPDATE log_iotdbandeng SET time_off=CURRENT_TIMESTAMP WHERE id_mitra=? ORDER BY time_on DESC LIMIT 1`, [
+            id,
+        ])
+        .then((data) => {
+            resolve(data);
+        })
+        .catch((err) => {
+            console.log(`[!] Error : dbMethod : updateLogIOTDevices : ${err}`);
+            reject(err);
+        });
+    })
+}
+
 module.exports = {
     saveDataIOT,
     getDataIOTbyId,
     getDetailMitra,
     getAvailableLaporanData,
-    getIOTRunningData
+    getIOTRunningData,
+    addLogDeviceIOT,
+    updateLogIOTDevices
 };
